@@ -6,7 +6,7 @@ inicio = time.time()
 meses = {"ene": "01", "feb": "02", "mar": "03", "abr": "04", "may": "05", "jun": "06",
          "jul": "07", "ago": "08", "sep": "09", "oct": "10", "nov": "11", "dic": "12"}
 
-ruta = r"C:\Users\danie\OneDrive\Escritorio\Datos.xlsx"
+ruta = r"C:\Users\danie\OneDrive\Escritorio\Datos\Excel\Practicas Data Analysis\etl_Python\Datos.xlsx"
 
 df = pd.read_excel(ruta,  sheet_name= 'Hoja2 RF04', skiprows= 4, header = 0)
 
