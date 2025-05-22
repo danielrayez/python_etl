@@ -1,5 +1,6 @@
 import pandas as pd 
 import time
+import re
 
 inicio = time.time()
 # Diccionario para convertir meses en español a números
@@ -39,10 +40,9 @@ df_ptp = df[[ 'CANAL','GRUPO',  'CODIGO',  'Abr_25 PTP $$', 'May_25 PTP $$', 'Ju
 
 #ANULO DINAMIZACIÓN DE FECHAS
 df_ptp = df_ptp.melt(id_vars= ['CANAL','GRUPO',  'CODIGO'], var_name= "Fecha", value_name= "Valor")
-import re
 df_ptp["Fecha"] = df_ptp["Fecha"].apply(lambda x: re.sub(r"\s*PTP\s*\$\$", "", x)).str.lower()
 
-#Funcion para transformación gennerica de todos los df
+#Funcion para transformación generica de todos los df
 def transformar_df(df):
 
   df["Fecha"] = df["Fecha"].astype(str)  # Asegura que sea string
