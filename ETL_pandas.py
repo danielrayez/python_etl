@@ -3,9 +3,6 @@ import time
 import re
 
 inicio = time.time()
-# Diccionario para convertir meses en español a números
-meses = {"ene": "01", "feb": "02", "mar": "03", "abr": "04", "may": "05", "jun": "06",
-         "jul": "07", "ago": "08", "sep": "09", "oct": "10", "nov": "11", "dic": "12"}
 
 ruta = r"C:\Users\danie\OneDrive\Escritorio\Datos\Excel\Practicas Data Analysis\etl_Python\Datos.xlsx"
 
@@ -17,7 +14,7 @@ df_cajas = df[['CANAL','GRUPO',  'CODIGO','abr-25', 'may-25', 'jun-25', 'jul-25'
 #ANULO DINAMIZACIÓN DE FECHAS
 df_cajas = df_cajas.melt(id_vars= ['CANAL','GRUPO',  'CODIGO'], var_name= "Fecha", value_name= "Valor")
 df_cajas['Fecha'] = df_cajas['Fecha'].str.replace("-", "_", regex= True)
-
+  
 ##Precios
 df_precios = df[[ 'CANAL','GRUPO',  'CODIGO', 'abr_25-Pr Netos', 'may_25-Pr Netos', 'jun_25-Pr Netos', 'jul_25-Pr Netos',
                  'ago_25-Pr Netos', 'sep_25-Pr Netos', 'oct_25-Pr Netos', 'nov_25-Pr Netos', 'dic_25-Pr Netos',
@@ -42,30 +39,32 @@ df_ptp = df[[ 'CANAL','GRUPO',  'CODIGO',  'Abr_25 PTP $$', 'May_25 PTP $$', 'Ju
 df_ptp = df_ptp.melt(id_vars= ['CANAL','GRUPO',  'CODIGO'], var_name= "Fecha", value_name= "Valor")
 df_ptp["Fecha"] = df_ptp["Fecha"].apply(lambda x: re.sub(r"\s*PTP\s*\$\$", "", x)).str.lower()
 
-#Funcion para transformación generica de todos los df
-def transformar_df(df):
+# #Funcion para transformación generica de todos los df
+# def transformar_df(df):
 
-  df["Fecha"] = df["Fecha"].astype(str)  # Asegura que sea string
+#   df["Fecha"] = df["Fecha"].astype(str)  # Asegura que sea string
+#   #Para cambiar Fecha al formato correcto, necesito transformar el string. Separo la columna
 
-  #Para cambiar Fecha al formato correcto, necesito transformar el string. Separo la columna
-  df[['Mes', 'Año']] = df['Fecha'].str.split("_", expand= True)
+#   df[['Mes', 'Año']] = df['Fecha'].str.split("_", expand= True)
 
-  #Cambio el nombre del mes por su número
-  df['Mes'] = df["Mes"].map(meses)
+#   #Cambio el nombre del mes por su número
+#   df['Mes'] = df["Mes"].map(meses)
 
-  #Agrego primer dia del mes y corrijo año
-  df['dia'] = '01'
-  df['Año'] = "20" + df['Año']
+#   #Agrego primer dia del mes y corrijo año
+#   df['dia'] = '01'
+#   df['Año'] = "20" + df['Año']
 
-  #Combino dia,mes y año
-  df= df[['CANAL','GRUPO', 'CODIGO', 'Valor','Mes','Año','dia']]
-  df['Fecha'] = pd.to_datetime( df['Mes']+ "-"+ df['dia'] + "-" + df['Año'])
-  df.drop(columns=['Mes','Año','dia'], inplace=True)
+#   #Combino dia,mes y año
+#   df= df[['CANAL','GRUPO', 'CODIGO', 'Valor','Mes','Año','dia']]
+#   df['Fecha'] = pd.to_datetime( df['Mes']+ "-"+ df['dia'] + "-" + df['Año'])
+#   df.drop(columns=['Mes','Año','dia'], inplace=True)
 
-  #LLave para combinar dataframes
-  df['LLave'] = df['CANAL'] + df['GRUPO'] + df['CODIGO'].astype(str) + df["Fecha"].astype(str)
+#   #LLave para combinar dataframes
+#   df['LLave'] = df['CANAL'] + df['GRUPO'] + df['CODIGO'].astype(str) + df["Fecha"].astype(str)
 
-  return df
+  # return df
+
+from funcion_limpieza import transformar_df # type: ignore
 
 df_cajas = transformar_df(df_cajas)
 df_precios = transformar_df(df_precios)
